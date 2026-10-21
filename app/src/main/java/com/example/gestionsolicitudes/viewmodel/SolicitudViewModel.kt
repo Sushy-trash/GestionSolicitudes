@@ -1,3 +1,4 @@
+
 package com.example.gestionsolicitudes.viewmodel
 
 import android.app.Application
@@ -24,7 +25,8 @@ data class SolicitudUiState(
     val guardando: Boolean = false,
     val guardadoExitosamente: Boolean = false,
     val mensajeError: String? = null,
-    val solicitudes: List<SolicitudEntity> = emptyList()
+    val solicitudes: List<SolicitudEntity> = emptyList(),
+    val solicitudEditandoId: Long? = null
 )
 
 class SolicitudViewModel(
@@ -87,6 +89,74 @@ class SolicitudViewModel(
         }
     }
 
+    fun prepararNuevaSolicitud() {
+        _uiState.update {
+            it.copy(
+                titulo = "",
+                descripcion = "",
+                categoria = "",
+                servicio = "",
+                tituloError = null,
+                descripcionError = null,
+                categoriaError = null,
+                solicitudEditandoId = null,
+                guardando = false,
+                guardadoExitosamente = false,
+                mensajeError = null
+            )
+        }
+    }
+
+    fun cargarSolicitud(id: Long) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    guardando = true,
+                    guardadoExitosamente = false,
+                    mensajeError = null
+                )
+            }
+
+            try {
+                val solicitud = repository.obtenerSolicitudPorId(id)
+
+                if (solicitud == null) {
+                    _uiState.update {
+                        it.copy(
+                            mensajeError = "No se encontró la solicitud."
+                        )
+                    }
+                    return@launch
+                }
+
+                _uiState.update {
+                    it.copy(
+                        titulo = solicitud.titulo,
+                        descripcion = solicitud.descripcion,
+                        categoria = solicitud.categoria,
+                        servicio = solicitud.servicioRelacionado.orEmpty(),
+                        solicitudEditandoId = solicitud.id,
+                        tituloError = null,
+                        descripcionError = null,
+                        categoriaError = null,
+                        mensajeError = null
+                    )
+                }
+            } catch (error: Exception) {
+                _uiState.update {
+                    it.copy(
+                        mensajeError = error.message
+                            ?: "No se pudo cargar la solicitud."
+                    )
+                }
+            } finally {
+                _uiState.update {
+                    it.copy(guardando = false)
+                }
+            }
+        }
+    }
+
     fun guardarSolicitud() {
         val actual = _uiState.value
 
@@ -128,16 +198,36 @@ class SolicitudViewModel(
             }
 
             try {
-                val solicitud = SolicitudEntity(
-                    titulo = actual.titulo.trim(),
-                    descripcion = actual.descripcion.trim(),
-                    categoria = actual.categoria.trim(),
-                    servicioRelacionado = actual.servicio
-                        .trim()
-                        .ifBlank { null }
-                )
+                val existente = actual.solicitudEditandoId?.let { id ->
+                    repository.obtenerSolicitudPorId(id)
+                        ?: throw IllegalStateException(
+                            "La solicitud que intentas editar ya no existe."
+                        )
+                }
 
-                repository.insertarSolicitud(solicitud)
+                if (existente == null) {
+                    val nuevaSolicitud = SolicitudEntity(
+                        titulo = actual.titulo.trim(),
+                        descripcion = actual.descripcion.trim(),
+                        categoria = actual.categoria.trim(),
+                        servicioRelacionado = actual.servicio
+                            .trim()
+                            .ifBlank { null }
+                    )
+
+                    repository.insertarSolicitud(nuevaSolicitud)
+                } else {
+                    val solicitudActualizada = existente.copy(
+                        titulo = actual.titulo.trim(),
+                        descripcion = actual.descripcion.trim(),
+                        categoria = actual.categoria.trim(),
+                        servicioRelacionado = actual.servicio
+                            .trim()
+                            .ifBlank { null }
+                    )
+
+                    repository.actualizarSolicitud(solicitudActualizada)
+                }
 
                 _uiState.update {
                     it.copy(
@@ -148,6 +238,7 @@ class SolicitudViewModel(
                         tituloError = null,
                         descripcionError = null,
                         categoriaError = null,
+                        solicitudEditandoId = null,
                         guardadoExitosamente = true
                     )
                 }
@@ -176,3 +267,4 @@ class SolicitudViewModel(
         }
     }
 }
+
