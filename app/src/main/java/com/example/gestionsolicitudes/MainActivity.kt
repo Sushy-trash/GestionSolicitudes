@@ -10,7 +10,6 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import com.example.gestionsolicitudes.ui.view.QrScannerScreen
 import com.example.gestionsolicitudes.viewmodel.QrViewModel
 import com.example.gestionsolicitudes.utils.CameraPermissionHelper
 import com.example.gestionsolicitudes.navigation.AppNavigation
@@ -46,15 +45,10 @@ class MainActivity : ComponentActivity() {
         hasCameraPermission = CameraPermissionHelper.hasCameraPermission(this)
 
         setContent {
-            // Use MaterialTheme directly as a quick fix
             MaterialTheme {
                 Surface {
-                    QrScannerScreen(
-                        viewModel = qrViewModel,
-                        hasCameraPermission = hasCameraPermission,
-                        onRequestPermission = {
-                            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-                        }
+                    AppNavigation(
+                        viewModel = solicitudViewModel
                     )
                 }
             }
