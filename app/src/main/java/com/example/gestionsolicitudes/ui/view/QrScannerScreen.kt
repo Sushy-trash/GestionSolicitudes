@@ -19,7 +19,8 @@ import com.example.gestionsolicitudes.utils.QrScanner
 fun QrScannerScreen(
     viewModel: QrViewModel,
     hasCameraPermission: Boolean,
-    onRequestPermission: () -> Unit
+    onRequestPermission: () -> Unit,
+    onVolver: () ->Unit
 ) {
     val qrResult by viewModel.qrResult.observeAsState()
     val context = LocalContext.current
@@ -133,6 +134,14 @@ fun QrScannerScreen(
                     Text("Escanear otro código QR")
                 }
             }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedButton(
+            onClick = onVolver,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Volver a la solicitud")
         }
     }
 }

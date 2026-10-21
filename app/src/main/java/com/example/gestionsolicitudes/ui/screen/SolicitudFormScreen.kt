@@ -44,7 +44,8 @@ fun SolicitudFormScreen(
     onCategoriaChange: (String) -> Unit,
     onServicioChange: (String) -> Unit,
     onGuardar: () -> Unit,
-    onVolver: () -> Unit
+    onVolver: () -> Unit,
+    onEscanearQr: () -> Unit
 ) {
     var categoriaMenuExpandido by remember { mutableStateOf(false) }
 
@@ -165,6 +166,13 @@ fun SolicitudFormScreen(
             }
 
             Spacer(modifier = Modifier.height(4.dp))
+
+            OutlinedButton(
+                onClick = onEscanearQr,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Escanear código QR")
+            }
 
             Button(
                 onClick = onGuardar,

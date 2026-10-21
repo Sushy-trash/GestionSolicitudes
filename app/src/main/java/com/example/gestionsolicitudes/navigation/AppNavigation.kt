@@ -12,10 +12,15 @@ import androidx.navigation.navArgument
 import com.example.gestionsolicitudes.ui.screen.ListaSolicitudesScreen
 import com.example.gestionsolicitudes.ui.screen.SolicitudFormScreen
 import com.example.gestionsolicitudes.viewmodel.SolicitudViewModel
+import com.example.gestionsolicitudes.ui.view.QrScannerScreen
+import com.example.gestionsolicitudes.viewmodel.QrViewModel
 
 @Composable
 fun AppNavigation(
-    viewModel: SolicitudViewModel
+    viewModel: SolicitudViewModel,
+    qrViewModel: QrViewModel,
+    hasCameraPermission: Boolean,
+    onRequestPermission: () -> Unit
 ) {
     val navController = rememberNavController()
     val uiState by viewModel.uiState.collectAsState()
@@ -53,8 +58,22 @@ fun AppNavigation(
                 onCategoriaChange = viewModel::actualizarCategoria,
                 onServicioChange = viewModel::actualizarServicio,
                 onGuardar = viewModel::guardarSolicitud,
+                onEscanearQr = {
+                    navController.navigate("escanner_qr")
+                },
                 onVolver = {
                     viewModel.limpiarMensaje()
+                    navController.popBackStack()
+                }
+
+            )
+        }
+        composable("escanner_qr") {
+            QrScannerScreen(
+                viewModel = qrViewModel,
+                hasCameraPermission = hasCameraPermission,
+                onRequestPermission = onRequestPermission,
+                onVolver = {
                     navController.popBackStack()
                 }
             )

@@ -48,7 +48,12 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 Surface {
                     AppNavigation(
-                        viewModel = solicitudViewModel
+                        viewModel = solicitudViewModel,
+                        qrViewModel = qrViewModel,
+                        hasCameraPermission = hasCameraPermission,
+                        onRequestPermission = {
+                            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+                        }
                     )
                 }
             }
