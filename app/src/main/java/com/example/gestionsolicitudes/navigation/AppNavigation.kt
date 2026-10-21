@@ -35,12 +35,11 @@ fun AppNavigation(
             ListaSolicitudesScreen(
                 uiState = uiState,
                 onNuevaSolicitud = {
-                    viewModel.limpiarMensaje()
+                    viewModel.prepararNuevaSolicitud()
                     navController.navigate("formulario_solicitud")
                 },
                 onSeleccionarSolicitud = { solicitud ->
-                    // La edición se conectará cuando implementemos
-                    // la carga de una solicitud existente en el ViewModel.
+                    viewModel.cargarSolicitud(solicitud.id)
                     navController.navigate("formulario_solicitud")
                 }
             )

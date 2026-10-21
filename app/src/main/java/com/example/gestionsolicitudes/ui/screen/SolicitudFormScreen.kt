@@ -52,7 +52,13 @@ fun SolicitudFormScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Nueva solicitud")
+                    Text(
+                        if (uiState.solicitudEditandoId == null) {
+                            "Nueva solicitud"
+                        } else {
+                            "Editar solicitud"
+                        }
+                    )
                 }
             )
         }
@@ -168,7 +174,13 @@ fun SolicitudFormScreen(
                 if (uiState.guardando) {
                     CircularProgressIndicator()
                 } else {
-                    Text("Guardar solicitud")
+                    Text(
+                        if (uiState.solicitudEditandoId == null) {
+                            "Guardar solicitud"
+                        } else {
+                            "Guardar cambios"
+                        }
+                    )
                 }
             }
 
