@@ -73,6 +73,9 @@ fun AppNavigation(
                 viewModel = qrViewModel,
                 hasCameraPermission = hasCameraPermission,
                 onRequestPermission = onRequestPermission,
+                onQrDetectado = { codigo ->
+                    viewModel.consultarSolicitudPorCodigo(codigo)
+                },
                 onVolver = {
                     navController.popBackStack()
                 }

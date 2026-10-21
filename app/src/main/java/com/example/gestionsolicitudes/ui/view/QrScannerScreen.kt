@@ -20,6 +20,7 @@ fun QrScannerScreen(
     viewModel: QrViewModel,
     hasCameraPermission: Boolean,
     onRequestPermission: () -> Unit,
+    onQrDetectado: (String) -> Unit,
     onVolver: () ->Unit
 ) {
     val qrResult by viewModel.qrResult.observeAsState()
@@ -67,6 +68,7 @@ fun QrScannerScreen(
                     onQrCodeScanned = { qrContent ->
                         // Procesar el QR detectado
                         viewModel.onQrDetected(qrContent)
+                        onQrDetectado(qrContent)
                         isScanning = false
                         Toast.makeText(context, "QR detectado!", Toast.LENGTH_SHORT).show()
                     },
