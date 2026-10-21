@@ -16,6 +16,8 @@ import com.example.gestionsolicitudes.utils.CameraPermissionHelper
 
 class MainActivity : ComponentActivity() {
 
+
+
     private val qrViewModel: QrViewModel by viewModels()
 
     // Estado para controlar si tenemos permiso
