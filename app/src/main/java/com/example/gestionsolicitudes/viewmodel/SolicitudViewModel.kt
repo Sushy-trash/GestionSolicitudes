@@ -266,5 +266,30 @@ class SolicitudViewModel(
             )
         }
     }
+
+    fun consultarSolicitudPorCodigo(codigo: String) {
+        viewModelScope.launch {
+            try {
+                val solicitud = repository.obtenerSolicitudPorCodigo(codigo.trim())
+
+                if (solicitud != null) {
+                    cargarSolicitud(solicitud.id)
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            mensajeError = "No se encontró una solicitud con ese código."
+                        )
+                    }
+                }
+            } catch (error: Exception) {
+                _uiState.update {
+                    it.copy(
+                        mensajeError = error.message
+                            ?: "No se pudo consultar la solicitud."
+                    )
+                }
+            }
+        }
+    }
 }
 

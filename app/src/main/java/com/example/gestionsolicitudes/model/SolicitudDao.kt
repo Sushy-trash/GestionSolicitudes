@@ -25,4 +25,7 @@ interface SolicitudDao {
 
     @Query("DELETE FROM solicitudes WHERE id = :id")
     suspend fun eliminarSolicitud(id: Long)
+
+    @Query("SELECT * FROM solicitudes WHERE codigo = :codigo LIMIT 1")
+    suspend fun obtenerSolicitudPorCodigo(codigo: String): SolicitudEntity?
 }

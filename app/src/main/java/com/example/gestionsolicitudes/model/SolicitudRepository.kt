@@ -25,4 +25,8 @@ class SolicitudRepository(
     suspend fun eliminarSolicitud(id: Long) {
         solicitudDao.eliminarSolicitud(id)
     }
+
+    suspend fun obtenerSolicitudPorCodigo(
+        codigo: String
+    ): SolicitudEntity? = solicitudDao.obtenerSolicitudPorCodigo(codigo)
 }
