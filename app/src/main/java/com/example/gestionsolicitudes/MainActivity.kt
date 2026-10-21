@@ -13,12 +13,16 @@ import androidx.compose.material3.Surface
 import com.example.gestionsolicitudes.ui.view.QrScannerScreen
 import com.example.gestionsolicitudes.viewmodel.QrViewModel
 import com.example.gestionsolicitudes.utils.CameraPermissionHelper
+import com.example.gestionsolicitudes.navigation.AppNavigation
+import com.example.gestionsolicitudes.viewmodel.SolicitudViewModel
 
 class MainActivity : ComponentActivity() {
 
 
 
     private val qrViewModel: QrViewModel by viewModels()
+
+    private val solicitudViewModel: SolicitudViewModel by viewModels()
 
     // Estado para controlar si tenemos permiso
     private var hasCameraPermission by mutableStateOf(false)
