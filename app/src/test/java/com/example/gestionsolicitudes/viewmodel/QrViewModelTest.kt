@@ -1,12 +1,33 @@
-
 package com.example.gestionesolicitudes.viewmodel
 
+import androidx.arch.core.executor.ArchTaskExecutor
+import androidx.arch.core.executor.TaskExecutor
 import com.example.gestionsolicitudes.data.model.QrResult
+import com.example.gestionsolicitudes.viewmodel.QrViewModel
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import com.example.gestionsolicitudes.viewmodel.QrViewModel
 
 class QrViewModelTest : FunSpec({
+
+    beforeSpec {
+        ArchTaskExecutor.getInstance().setDelegate(
+            object : TaskExecutor() {
+                override fun executeOnDiskIO(runnable: Runnable) {
+                    runnable.run()
+                }
+
+                override fun postToMainThread(runnable: Runnable) {
+                    runnable.run()
+                }
+
+                override fun isMainThread(): Boolean = true
+            }
+        )
+    }
+
+    afterSpec {
+        ArchTaskExecutor.getInstance().setDelegate(null)
+    }
 
     test("Debe procesar correctamente un QR") {
         val viewModel = QrViewModel()
