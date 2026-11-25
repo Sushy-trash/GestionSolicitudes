@@ -1,62 +1,26 @@
 
 package com.example.gestionsolicitudes.model
 
-import com.example.gestionsolicitudes.data.remote.SolicitudApiService
 import kotlinx.coroutines.flow.Flow
 
 class SolicitudRepository(
-    private val solicitudDao: SolicitudDao,
-    private val api: SolicitudApiService
+    private val solicitudDao: SolicitudDao
 ) {
+    fun obtenerSolicitudes(): Flow<List<SolicitudEntity>> =
+        solicitudDao.obtenerSolicitudes()
 
-    fun obtenerSolicitudes(): Flow<List<SolicitudEntity>> {
-        return solicitudDao.obtenerSolicitudes()
-    }
+    suspend fun obtenerSolicitudPorId(id: Long): SolicitudEntity? =
+        solicitudDao.obtenerSolicitudPorId(id)
 
-    suspend fun sincronizarSolicitudes() {
-        val remotas = api.obtenerSolicitudes()
+    suspend fun insertarSolicitud(solicitud: SolicitudEntity): Long =
+        solicitudDao.insertarSolicitud(solicitud)
 
-        remotas.forEach { remota ->
-            val local = solicitudDao.obtenerSolicitudPorCodigo(remota.codigo)
-
-            if (local == null) {
-                solicitudDao.insertarSolicitud(remota.copy(id = 0))
-            } else {
-                solicitudDao.actualizarSolicitud(remota.copy(id = local.id))
-            }
-        }
-    }
-
-    suspend fun obtenerSolicitudPorId(id: Long): SolicitudEntity? {
-        return solicitudDao.obtenerSolicitudPorId(id)
-    }
-
-    suspend fun insertarSolicitud(solicitud: SolicitudEntity): Long {
-        val respuesta = api.crearSolicitud(solicitud.copy(id = 0))
-        return solicitudDao.insertarSolicitud(respuesta)
-    }
-
-    suspend fun actualizarSolicitud(solicitud: SolicitudEntity) {
-        api.actualizarSolicitud(solicitud.id, solicitud)
+    suspend fun actualizarSolicitud(solicitud: SolicitudEntity) =
         solicitudDao.actualizarSolicitud(solicitud)
-    }
 
-    suspend fun eliminarSolicitud(id: Long) {
-        val solicitud = solicitudDao.obtenerSolicitudPorId(id)
-            ?: throw IllegalStateException("Solicitud no encontrada")
-
-        api.eliminarSolicitud(solicitud.id)
+    suspend fun eliminarSolicitud(id: Long) =
         solicitudDao.eliminarSolicitud(id)
-    }
 
-    suspend fun obtenerSolicitudPorCodigo(
-        codigo: String
-    ): SolicitudEntity? {
-        val local = solicitudDao.obtenerSolicitudPorCodigo(codigo)
-        if (local != null) return local
-
-        return api.obtenerSolicitudes().firstOrNull {
-            it.codigo == codigo
-        }
-    }
+    suspend fun obtenerSolicitudPorCodigo(codigo: String): SolicitudEntity? =
+        solicitudDao.obtenerSolicitudPorCodigo(codigo)
 }
