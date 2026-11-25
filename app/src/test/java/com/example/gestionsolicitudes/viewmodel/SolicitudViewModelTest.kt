@@ -1,7 +1,6 @@
 
 package com.example.gestionsolicitudes.viewmodel
 
-import android.app.Application
 import com.example.gestionsolicitudes.model.SolicitudEntity
 import com.example.gestionsolicitudes.model.SolicitudRepository
 import io.kotest.core.spec.style.FunSpec
@@ -20,16 +19,10 @@ import kotlinx.coroutines.test.setMain
 
 class SolicitudViewModelTest : FunSpec({
 
-    fun crearViewModel(
-        repository: SolicitudRepository
-    ): SolicitudViewModel {
-        val application = mockk<Application>(relaxed = true)
+    fun crearViewModel(repository: SolicitudRepository): SolicitudViewModel {
+        every { repository.obtenerSolicitudes() } returns flowOf(emptyList())
 
-        every {
-            repository.obtenerSolicitudes()
-        } returns flowOf(emptyList())
-
-        return SolicitudViewModel(application, repository)
+        return SolicitudViewModel(repository)
     }
 
     test("Debe actualizar los campos del formulario") {
