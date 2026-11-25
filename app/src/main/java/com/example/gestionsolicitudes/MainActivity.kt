@@ -14,7 +14,8 @@ import com.example.gestionsolicitudes.viewmodel.QrViewModel
 import com.example.gestionsolicitudes.utils.CameraPermissionHelper
 import com.example.gestionsolicitudes.navigation.AppNavigation
 import com.example.gestionsolicitudes.viewmodel.SolicitudViewModel
-
+import com.example.gestionsolicitudes.viewmodel.PostViewModel
+import com.example.gestionsolicitudes.viewmodel.PostViewModelFactory
 class MainActivity : ComponentActivity() {
 
 
@@ -36,6 +37,10 @@ class MainActivity : ComponentActivity() {
         } else {
             Toast.makeText(this, "Se necesita permiso de cámara para escanear QR", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private val postViewModel: PostViewModel by viewModels {
+        PostViewModelFactory()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
