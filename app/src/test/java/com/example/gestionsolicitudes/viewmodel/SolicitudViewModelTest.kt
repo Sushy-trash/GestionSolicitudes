@@ -1,3 +1,4 @@
+@file:OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 
 package com.example.gestionsolicitudes.viewmodel
 
@@ -26,52 +27,81 @@ class SolicitudViewModelTest : FunSpec({
     }
 
     test("Debe actualizar los campos del formulario") {
-        val repository = mockk<SolicitudRepository>(relaxed = true)
+        runTest {
+            Dispatchers.setMain(StandardTestDispatcher(testScheduler))
 
-        val viewModel = crearViewModel(repository)
+            try {
+                val repository = mockk<SolicitudRepository>(relaxed = true)
+                val viewModel = crearViewModel(repository)
 
-        viewModel.actualizarTitulo("Problema técnico")
-        viewModel.actualizarDescripcion("No funciona el sistema")
-        viewModel.actualizarCategoria("Informática")
-        viewModel.actualizarServicio("Soporte")
+                viewModel.actualizarTitulo("Problema técnico")
+                viewModel.actualizarDescripcion("No funciona el sistema")
+                viewModel.actualizarCategoria("Informática")
+                viewModel.actualizarServicio("Soporte")
 
-        viewModel.uiState.value.titulo shouldBe "Problema técnico"
-        viewModel.uiState.value.descripcion shouldBe "No funciona el sistema"
-        viewModel.uiState.value.categoria shouldBe "Informática"
-        viewModel.uiState.value.servicio shouldBe "Soporte"
+                viewModel.uiState.value.titulo shouldBe "Problema técnico"
+                viewModel.uiState.value.descripcion shouldBe "No funciona el sistema"
+                viewModel.uiState.value.categoria shouldBe "Informática"
+                viewModel.uiState.value.servicio shouldBe "Soporte"
+
+                advanceUntilIdle()
+            } finally {
+                Dispatchers.resetMain()
+            }
+        }
     }
 
     test("Debe limpiar el formulario al preparar una nueva solicitud") {
-        val repository = mockk<SolicitudRepository>(relaxed = true)
-        val viewModel = crearViewModel(repository)
+        runTest {
+            Dispatchers.setMain(StandardTestDispatcher(testScheduler))
 
-        viewModel.actualizarTitulo("Solicitud anterior")
-        viewModel.actualizarDescripcion("Descripción anterior")
-        viewModel.actualizarCategoria("Informática")
+            try {
+                val repository = mockk<SolicitudRepository>(relaxed = true)
+                val viewModel = crearViewModel(repository)
 
-        viewModel.prepararNuevaSolicitud()
+                viewModel.actualizarTitulo("Solicitud anterior")
+                viewModel.actualizarDescripcion("Descripción anterior")
+                viewModel.actualizarCategoria("Informática")
 
-        viewModel.uiState.value.titulo shouldBe ""
-        viewModel.uiState.value.descripcion shouldBe ""
-        viewModel.uiState.value.categoria shouldBe ""
-        viewModel.uiState.value.solicitudEditandoId shouldBe null
-        viewModel.uiState.value.guardadoExitosamente shouldBe false
+                viewModel.prepararNuevaSolicitud()
+
+                viewModel.uiState.value.titulo shouldBe ""
+                viewModel.uiState.value.descripcion shouldBe ""
+                viewModel.uiState.value.categoria shouldBe ""
+                viewModel.uiState.value.solicitudEditandoId shouldBe null
+                viewModel.uiState.value.guardadoExitosamente shouldBe false
+
+                advanceUntilIdle()
+            } finally {
+                Dispatchers.resetMain()
+            }
+        }
     }
 
     test("Debe validar los campos obligatorios") {
-        val repository = mockk<SolicitudRepository>(relaxed = true)
-        val viewModel = crearViewModel(repository)
+        runTest {
+            Dispatchers.setMain(StandardTestDispatcher(testScheduler))
 
-        viewModel.guardarSolicitud()
+            try {
+                val repository = mockk<SolicitudRepository>(relaxed = true)
+                val viewModel = crearViewModel(repository)
 
-        viewModel.uiState.value.tituloError shouldBe
-                "El título es obligatorio."
+                viewModel.guardarSolicitud()
 
-        viewModel.uiState.value.descripcionError shouldBe
-                "La descripción es obligatoria."
+                viewModel.uiState.value.tituloError shouldBe
+                        "El título es obligatorio."
 
-        viewModel.uiState.value.categoriaError shouldBe
-                "Selecciona una categoría."
+                viewModel.uiState.value.descripcionError shouldBe
+                        "La descripción es obligatoria."
+
+                viewModel.uiState.value.categoriaError shouldBe
+                        "Selecciona una categoría."
+
+                advanceUntilIdle()
+            } finally {
+                Dispatchers.resetMain()
+            }
+        }
     }
 
     test("Debe guardar una solicitud nueva correctamente") {
@@ -220,15 +250,25 @@ class SolicitudViewModelTest : FunSpec({
     }
 
     test("Debe limpiar los mensajes del estado") {
-        val repository = mockk<SolicitudRepository>(relaxed = true)
-        val viewModel = crearViewModel(repository)
+        runTest {
+            Dispatchers.setMain(StandardTestDispatcher(testScheduler))
 
-        viewModel.actualizarTitulo("Prueba")
-        viewModel.guardarSolicitud()
+            try {
+                val repository = mockk<SolicitudRepository>(relaxed = true)
+                val viewModel = crearViewModel(repository)
 
-        viewModel.limpiarMensaje()
+                viewModel.actualizarTitulo("Prueba")
+                viewModel.guardarSolicitud()
 
-        viewModel.uiState.value.guardadoExitosamente shouldBe false
-        viewModel.uiState.value.mensajeError shouldBe null
+                viewModel.limpiarMensaje()
+
+                viewModel.uiState.value.guardadoExitosamente shouldBe false
+                viewModel.uiState.value.mensajeError shouldBe null
+
+                advanceUntilIdle()
+            } finally {
+                Dispatchers.resetMain()
+            }
+        }
     }
 })
