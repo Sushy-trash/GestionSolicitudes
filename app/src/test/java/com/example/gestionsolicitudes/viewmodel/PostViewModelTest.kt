@@ -15,7 +15,6 @@ import kotlinx.coroutines.test.setMain
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
-import io.mockk.coAnswers
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PostViewModelTest : FunSpec({
