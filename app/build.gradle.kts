@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
     implementation(libs.androidx.navigation.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
