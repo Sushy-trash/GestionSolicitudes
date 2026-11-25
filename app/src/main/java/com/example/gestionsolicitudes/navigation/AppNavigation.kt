@@ -14,16 +14,20 @@ import com.example.gestionsolicitudes.ui.screen.SolicitudFormScreen
 import com.example.gestionsolicitudes.viewmodel.SolicitudViewModel
 import com.example.gestionsolicitudes.ui.view.QrScannerScreen
 import com.example.gestionsolicitudes.viewmodel.QrViewModel
+import com.example.gestionsolicitudes.ui.screen.PostScreen
+import com.example.gestionsolicitudes.viewmodel.PostViewModel
 
 @Composable
 fun AppNavigation(
     viewModel: SolicitudViewModel,
     qrViewModel: QrViewModel,
+    postViewModel: PostViewModel,
     hasCameraPermission: Boolean,
     onRequestPermission: () -> Unit
 ) {
     val navController = rememberNavController()
     val uiState by viewModel.uiState.collectAsState()
+    val postUiState by postViewModel.uiState.collectAsState()
 
     LaunchedEffect(uiState.guardadoExitosamente) {
         if (uiState.guardadoExitosamente) {
@@ -82,6 +86,12 @@ fun AppNavigation(
                 onVolver = {
                     navController.popBackStack()
                 }
+            )
+        }
+        composable("publicaciones") {
+            PostScreen(
+                uiState = postUiState,
+                onReintentar = postViewModel::cargarPosts
             )
         }
     }
