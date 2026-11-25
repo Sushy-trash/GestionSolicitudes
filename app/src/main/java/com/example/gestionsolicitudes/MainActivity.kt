@@ -16,11 +16,20 @@ import com.example.gestionsolicitudes.navigation.AppNavigation
 import com.example.gestionsolicitudes.viewmodel.SolicitudViewModel
 import com.example.gestionsolicitudes.viewmodel.PostViewModel
 import com.example.gestionsolicitudes.viewmodel.PostViewModelFactory
+import com.example.gestionsolicitudes.model.DatabaseProvider
+import com.example.gestionsolicitudes.model.SolicitudRepository
+import com.example.gestionsolicitudes.viewmodel.SolicitudViewModelFactory
 class MainActivity : ComponentActivity() {
 
     private val qrViewModel: QrViewModel by viewModels()
 
-    private val solicitudViewModel: SolicitudViewModel by viewModels()
+    private val solicitudViewModel: SolicitudViewModel by viewModels {
+        SolicitudViewModelFactory(
+            SolicitudRepository(
+                DatabaseProvider.getDatabase(application).solicitudDao()
+            )
+        )
+    }
 
     // Estado para controlar si tenemos permiso
     private var hasCameraPermission by mutableStateOf(false)
