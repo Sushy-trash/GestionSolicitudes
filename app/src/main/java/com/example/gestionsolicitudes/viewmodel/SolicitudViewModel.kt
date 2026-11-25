@@ -244,6 +244,37 @@ class SolicitudViewModel(
         }
     }
 
+    fun eliminarSolicitud(id: Long) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    guardando = true,
+                    mensajeError = null
+                )
+            }
+
+            try {
+                repository.eliminarSolicitud(id)
+
+                _uiState.update {
+                    it.copy(
+                        guardando = false,
+                        mensajeError = null
+                    )
+                }
+
+            } catch (error: Exception) {
+                _uiState.update {
+                    it.copy(
+                        guardando = false,
+                        mensajeError = error.message
+                            ?: "No se pudo eliminar la solicitud."
+                    )
+                }
+            }
+        }
+    }
+
     fun limpiarMensaje() {
         _uiState.update {
             it.copy(
