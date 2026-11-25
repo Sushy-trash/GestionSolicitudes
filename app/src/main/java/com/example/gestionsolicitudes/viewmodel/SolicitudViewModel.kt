@@ -13,21 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-data class SolicitudUiState(
-    val titulo: String = "",
-    val descripcion: String = "",
-    val categoria: String = "",
-    val servicio: String = "",
-    val tituloError: String? = null,
-    val descripcionError: String? = null,
-    val categoriaError: String? = null,
-    val guardando: Boolean = false,
-    val guardadoExitosamente: Boolean = false,
-    val mensajeError: String? = null,
-    val solicitudes: List<SolicitudEntity> = emptyList(),
-    val solicitudEditandoId: Long? = null
-)
+import com.example.gestionsolicitudes.ui.screen.SolicitudUiState
 
 class SolicitudViewModel(
     application: Application
