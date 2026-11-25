@@ -18,8 +18,6 @@ import com.example.gestionsolicitudes.viewmodel.PostViewModel
 import com.example.gestionsolicitudes.viewmodel.PostViewModelFactory
 class MainActivity : ComponentActivity() {
 
-
-
     private val qrViewModel: QrViewModel by viewModels()
 
     private val solicitudViewModel: SolicitudViewModel by viewModels()
@@ -55,9 +53,12 @@ class MainActivity : ComponentActivity() {
                     AppNavigation(
                         viewModel = solicitudViewModel,
                         qrViewModel = qrViewModel,
+                        postViewModel = postViewModel,
                         hasCameraPermission = hasCameraPermission,
                         onRequestPermission = {
-                            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+                            requestPermissionLauncher.launch(
+                                Manifest.permission.CAMERA
+                            )
                         }
                     )
                 }
