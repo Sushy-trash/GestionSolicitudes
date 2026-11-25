@@ -2,7 +2,6 @@ package com.example.gestionsolicitudes.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.gestionsolicitudes.model.DatabaseProvider
 import com.example.gestionsolicitudes.model.SolicitudRepository
 
 class SolicitudViewModelFactory(
@@ -14,7 +13,6 @@ class SolicitudViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return SolicitudViewModel(repository) as T
         }
-
         throw IllegalArgumentException("ViewModel desconocido")
     }
 }

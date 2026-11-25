@@ -19,6 +19,7 @@ import com.example.gestionsolicitudes.viewmodel.PostViewModelFactory
 import com.example.gestionsolicitudes.model.DatabaseProvider
 import com.example.gestionsolicitudes.model.SolicitudRepository
 import com.example.gestionsolicitudes.viewmodel.SolicitudViewModelFactory
+import com.example.gestionsolicitudes.data.remote.SolicitudRetrofitInstance
 class MainActivity : ComponentActivity() {
 
     private val qrViewModel: QrViewModel by viewModels()
@@ -26,7 +27,8 @@ class MainActivity : ComponentActivity() {
     private val solicitudViewModel: SolicitudViewModel by viewModels {
         SolicitudViewModelFactory(
             SolicitudRepository(
-                DatabaseProvider.getDatabase(application).solicitudDao()
+                DatabaseProvider.getDatabase(application).solicitudDao(),
+                SolicitudRetrofitInstance.api
             )
         )
     }

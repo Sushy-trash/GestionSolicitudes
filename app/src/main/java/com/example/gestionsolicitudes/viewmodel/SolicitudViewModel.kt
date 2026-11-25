@@ -25,6 +25,15 @@ class SolicitudViewModel(
 
     private fun observarSolicitudes() {
         viewModelScope.launch {
+            try {
+                repository.sincronizarSolicitudes()
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(mensajeError = "Error al sincronizar: ${e.message}")
+                }
+            }
+        }
+        viewModelScope.launch {
             repository.obtenerSolicitudes()
                 .catch { error ->
                     _uiState.update {
