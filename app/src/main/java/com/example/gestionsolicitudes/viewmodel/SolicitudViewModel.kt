@@ -1,27 +1,20 @@
 
 package com.example.gestionsolicitudes.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.gestionsolicitudes.model.DatabaseProvider
 import com.example.gestionsolicitudes.model.SolicitudEntity
 import com.example.gestionsolicitudes.model.SolicitudRepository
+import com.example.gestionsolicitudes.ui.screen.SolicitudUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.example.gestionsolicitudes.ui.screen.SolicitudUiState
-
 class SolicitudViewModel(
-    application: Application,
-    private val repository: SolicitudRepository =
-        SolicitudRepository(
-            DatabaseProvider.getDatabase(application).solicitudDao()
-        )
-) : AndroidViewModel(application) {
+    private val repository: SolicitudRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SolicitudUiState())
     val uiState: StateFlow<SolicitudUiState> = _uiState.asStateFlow()
