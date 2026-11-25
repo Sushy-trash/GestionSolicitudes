@@ -32,7 +32,8 @@ fun ListaSolicitudesScreen(
     uiState: SolicitudUiState,
     onNuevaSolicitud: () -> Unit,
     onSeleccionarSolicitud: (SolicitudEntity) -> Unit,
-    onEliminarSolicitud: (Long) -> Unit
+    onEliminarSolicitud: (Long) -> Unit,
+    onVerPublicaciones: () -> Unit
 ) {
     var solicitudAEliminar by remember {
         mutableStateOf<SolicitudEntity?>(null)
@@ -103,6 +104,12 @@ fun ListaSolicitudesScreen(
             )
 
             Spacer(modifier = Modifier.padding(4.dp))
+            Button(
+                onClick = onVerPublicaciones,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Ver publicaciones externas")
+            }
 
             if (uiState.solicitudes.isEmpty()) {
                 Column(
