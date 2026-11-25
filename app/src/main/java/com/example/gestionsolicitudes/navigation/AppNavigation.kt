@@ -94,7 +94,10 @@ fun AppNavigation(
         composable("publicaciones") {
             PostScreen(
                 uiState = postUiState,
-                onReintentar = postViewModel::cargarPosts
+                onReintentar = postViewModel::cargarPosts,
+                onVolver = {
+                    navController.popBackStack()
+                }
             )
         }
     }

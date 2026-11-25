@@ -20,18 +20,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TextButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostScreen(
     uiState: PostUiState,
-    onReintentar: () -> Unit
+    onReintentar: () -> Unit,
+    onVolver: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text("Publicaciones externas")
+                },
+                navigationIcon = {
+                    TextButton(onClick = onVolver) {
+                        Text("Volver")
+                    }
                 }
             )
         }
