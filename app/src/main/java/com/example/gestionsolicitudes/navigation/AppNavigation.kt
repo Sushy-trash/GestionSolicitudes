@@ -53,6 +53,9 @@ fun AppNavigation(
                 },
                 onEliminarSolicitud = { id ->
                     viewModel.eliminarSolicitud(id)
+                },
+                onVerPublicaciones = {
+                    navController.navigate("publicaciones")
                 }
             )
         }
