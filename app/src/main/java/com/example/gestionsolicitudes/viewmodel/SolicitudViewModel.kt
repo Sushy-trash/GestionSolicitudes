@@ -16,14 +16,12 @@ import kotlinx.coroutines.launch
 import com.example.gestionsolicitudes.ui.screen.SolicitudUiState
 
 class SolicitudViewModel(
-    application: Application
+    application: Application,
+    private val repository: SolicitudRepository =
+        SolicitudRepository(
+            DatabaseProvider.getDatabase(application).solicitudDao()
+        )
 ) : AndroidViewModel(application) {
-
-    private val dao = DatabaseProvider
-        .getDatabase(application)
-        .solicitudDao()
-
-    private val repository = SolicitudRepository(dao)
 
     private val _uiState = MutableStateFlow(SolicitudUiState())
     val uiState: StateFlow<SolicitudUiState> = _uiState.asStateFlow()
