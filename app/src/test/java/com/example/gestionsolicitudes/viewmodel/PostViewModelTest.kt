@@ -12,7 +12,12 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runCurrent
+import io.mockk.coAnswers
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class PostViewModelTest : FunSpec({
 
     test("Debe cargar correctamente las publicaciones") {
@@ -49,23 +54,34 @@ class PostViewModelTest : FunSpec({
         }
     }
 
+
     test("Debe mostrar el estado de carga") {
         runTest {
             Dispatchers.setMain(StandardTestDispatcher(testScheduler))
 
             try {
                 val repository = mockk<PostRepository>()
+                val respuestaPendiente = CompletableDeferred<List<Post>>()
 
                 coEvery {
                     repository.getPosts()
-                } returns emptyList()
+                } coAnswers {
+                    respuestaPendiente.await()
+                }
 
                 val viewModel = PostViewModel(repository)
 
+                runCurrent()
+
+                // La petición sigue pendiente.
                 viewModel.uiState.value.cargando shouldBe true
+
+                // Simulamos que la API responde.
+                respuestaPendiente.complete(emptyList())
 
                 advanceUntilIdle()
 
+                // La carga debe haber terminado.
                 viewModel.uiState.value.cargando shouldBe false
 
             } finally {
@@ -73,6 +89,7 @@ class PostViewModelTest : FunSpec({
             }
         }
     }
+
 
     test("Debe mostrar un mensaje cuando ocurre un error") {
         runTest {
