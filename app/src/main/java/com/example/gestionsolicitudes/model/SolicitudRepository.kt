@@ -33,7 +33,7 @@ class SolicitudRepository(
 
     suspend fun insertarSolicitud(solicitud: SolicitudEntity): Long {
         val respuesta = api.crearSolicitud(solicitud.copy(id = 0))
-        return solicitudDao.insertarSolicitud(respuesta.copy(id = 0))
+        return solicitudDao.insertarSolicitud(respuesta)
     }
 
     suspend fun actualizarSolicitud(solicitud: SolicitudEntity) {
