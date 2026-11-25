@@ -22,14 +22,58 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.gestionsolicitudes.model.SolicitudEntity
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListaSolicitudesScreen(
     uiState: SolicitudUiState,
     onNuevaSolicitud: () -> Unit,
-    onSeleccionarSolicitud: (SolicitudEntity) -> Unit
+    onSeleccionarSolicitud: (SolicitudEntity) -> Unit,
+    onEliminarSolicitud: (Long) -> Unit
 ) {
+    var solicitudAEliminar by remember {
+        mutableStateOf<SolicitudEntity?>(null)
+    }
+
+    solicitudAEliminar?.let { solicitud ->
+
+        AlertDialog(
+            onDismissRequest = {
+                solicitudAEliminar = null
+            },
+            title = {
+                Text("Eliminar solicitud")
+            },
+            text = {
+                Text(
+                    "¿Estás seguro de que deseas eliminar " +
+                            "\"${solicitud.titulo}\"? Esta acción no se puede deshacer."
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onEliminarSolicitud(solicitud.id)
+                        solicitudAEliminar = null
+                    }
+                ) {
+                    Text("Eliminar")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        solicitudAEliminar = null
+                    }
+                ) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -126,6 +170,15 @@ fun ListaSolicitudesScreen(
                                     text = "Toca para consultar o editar",
                                     style = MaterialTheme.typography.bodySmall
                                 )
+
+                                Button(
+                                    onClick = {
+                                        solicitudAEliminar = solicitud
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Eliminar solicitud")
+                                }
                             }
                         }
                     }

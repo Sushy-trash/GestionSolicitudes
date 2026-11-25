@@ -46,6 +46,9 @@ fun AppNavigation(
                 onSeleccionarSolicitud = { solicitud ->
                     viewModel.cargarSolicitud(solicitud.id)
                     navController.navigate("formulario_solicitud")
+                },
+                onEliminarSolicitud = { id ->
+                    viewModel.eliminarSolicitud(id)
                 }
             )
         }
