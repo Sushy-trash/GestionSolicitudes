@@ -1,4 +1,3 @@
-
 package com.example.gestionsolicitudes.repository
 
 import com.example.gestionsolicitudes.data.model.Post
@@ -11,10 +10,10 @@ import io.mockk.mockk
 
 class PostRepositoryTest : FunSpec({
 
-    val apiService = mockk<ApiService>()
-    val repository = PostRepository(apiService)
-
     test("Debe obtener correctamente las publicaciones") {
+        val apiService = mockk<ApiService>()
+        val repository = PostRepository(apiService)
+
         val publicaciones = listOf(
             Post(
                 userId = 1,
@@ -38,6 +37,9 @@ class PostRepositoryTest : FunSpec({
     }
 
     test("Debe devolver una lista vacía cuando no hay publicaciones") {
+        val apiService = mockk<ApiService>()
+        val repository = PostRepository(apiService)
+
         coEvery {
             apiService.getPosts()
         } returns emptyList()
